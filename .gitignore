@@ -9,3 +9,6 @@ node_modules/
 *.sw*
 
 .env
+# Logs
+logs/
+*.log
