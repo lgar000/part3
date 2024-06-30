@@ -1,0 +1,35 @@
+### 
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+    "name" : "Mario Ortíz",
+    "number" : "111-56500"
+}
+
+### 
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+    "name" : "Mario Ortíz",
+    "number" : "212-34500"
+}
+
+### 
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+    "name" : "",
+    "number" : "212-34500"
+}
+
+### 
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+    "name" : "Alicia Torres",
+    "number" : "" 
+}
