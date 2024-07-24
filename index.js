@@ -1,5 +1,7 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
+
 
 let persons = [
     { 
@@ -25,6 +27,7 @@ let persons = [
 ]
 
 app.use(express.json())
+app.use(morgan('tiny'));
 
 app.get('/api/persons',(request, response)=>{ 
     response.json(persons)
@@ -33,8 +36,8 @@ app.get('/api/persons',(request, response)=>{
 app.get('/info', (request, response)=>{ 
     const date=  new Date()
     const numberPersons = persons.length
-    let messae = `<p>Ponebook as info for ${numberPersons} people</p><br><p>${date}</p>`;
-    response.send(messae)
+    let mmessage = `<p>Ponebook as info for ${numberPersons} people</p><br><p>${date}</p>`;
+    response.send(mmessage)
 })
 
 app.get('/api/persons/:id',(request, response)=>{ 
@@ -64,8 +67,8 @@ const generateId = () => {
 };
 
 
-app.post('/api/persons', (reques, response)=>{
-    const body = reques.body
+app.post('/api/persons', (request, response)=>{
+    const body = request.body
    
     if(persons.find(p=>p.name===body.name)  ){
         return response.status(400).json({
