@@ -94,7 +94,7 @@ app.put('/api/persons/:id', (request, response, next) =>{
         number: body.number,
     }
 
-    Person.findByIdAndUpdate(request.params.id, person, {new: true})
+    Person.findByIdAndUpdate(request.params.id, person, {new: true, runValidators: true, context: 'query'})
         .then(updatePerson=>{
             response.json(updatePerson)
         })
@@ -102,20 +102,10 @@ app.put('/api/persons/:id', (request, response, next) =>{
      
 })
 
-app.post('/api/persons', async (request, response) => {
+app.post('/api/persons', async (request, response, next) => {
     const body = request.body;
 
-    
-    if (!body.name) {
-        return response.status(400).json({
-            error: 'name missing.'
-        });
-    }
-    if (!body.number) {
-        return response.status(400).json({
-            error: 'number missing'
-        });
-    }
+   
     const personExists = await Person.find({name: body.name})
     if(personExists.length===1){
         app.put(`/api/persons/${personExists[0]._id}`, request, response, next);
@@ -128,7 +118,7 @@ app.post('/api/persons', async (request, response) => {
 
     person.save().then(savedPerson=>{
         response.json(savedPerson)
-    })
+    }).catch(error=> next(error))
 });
 
 const unknownEndpoint = (request, response) =>{
@@ -142,7 +132,10 @@ const errorHandler = (error, request, response, next ) => {
 
     if (error.name === 'CastError') {
         return response.status(400).send({ error: 'malformatted id' })
+    }else if (error.name === 'ValidationError') {
+        return response.status(400).json({ error: error.message })
     }
+
     next(error)
 }
 
